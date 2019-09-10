@@ -1,66 +1,33 @@
 package edu.springsecurity.hw15.service;
 
-import edu.springsecurity.hw15.model.Role;
 import edu.springsecurity.hw15.model.User;
-import edu.springsecurity.hw15.repository.UserRepository;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.security.access.prepost.PreAuthorize;
 
-import java.util.*;
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Optional;
 
-@Service
-public class UserService implements IUserService, UserDetailsService {
-    private final UserRepository userRepository;
+public interface UserService {
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    void saveUser(User user);
 
-    @Override
-    public void saveUser(User user) {
-        Set<Role> roles = new HashSet<>();
-        roles.add(Role.USER);
-        User user1 = new User(user.getUsername(), user.getEmail(), user.getPassword(), roles);
-        userRepository.save(user1);
-    }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    User updateUser(User user);
 
-    @Override
-    public User updateUser(User user) {
-        return userRepository.saveAndFlush(user);
-    }
+    @PreAuthorize("isAuthenticated()")
+    List<User> findAllUsers();
 
-    @Override
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
-    }
+    @PreAuthorize("isAuthenticated()")
+    Optional<User> getUserById(Long id);
 
-    @Override
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id).isPresent() ? userRepository.findById(id) : Optional.empty();
-    }
+    @PreAuthorize("isAuthenticated()")
+    Optional<User> findByUsername(String username);
 
-    @Override
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username).isPresent() ? userRepository.findByUsername(username) : Optional.empty();
-    }
+    @PreAuthorize("isAuthenticated()")
+    boolean existsByUsername(String username);
 
-    @Override
-    public boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
-    }
-
-    @Override
-    public void deleteByUsername(String username) {
-        userRepository.deleteByUsername(username);
-    }
-
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).get();
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(),
-                true, true, true, user.getAuthorities());
-    }
+    @Transactional
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    void deleteByUsername(String username);
 }

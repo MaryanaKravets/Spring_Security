@@ -1,7 +1,8 @@
 package edu.springsecurity.hw15.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,7 @@ import java.util.*;
 @Entity
 @Data
 @Table(name = "users")
+@NoArgsConstructor
 public class User implements Serializable, UserDetails {
 
     @Id
@@ -35,7 +37,6 @@ public class User implements Serializable, UserDetails {
     @CollectionTable(name = "Users_Role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     Set<Role> roles;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -88,9 +89,4 @@ public class User implements Serializable, UserDetails {
         this.password = password;
         this.roles = roles;
     }
-
-    public User() {
-    }
-
-    ;
 }
