@@ -37,7 +37,6 @@ public class User implements Serializable, UserDetails {
     @CollectionTable(name = "Users_Role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     Set<Role> roles;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         String ROLE_PREFIX = "ROLE_";

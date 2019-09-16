@@ -28,6 +28,7 @@ public class LibraryRestController {
         userService.saveUser(user);
 
         return ResponseEntity
+
                 .status(HttpStatus.CREATED)
                 .build();
     }
@@ -62,7 +63,7 @@ public class LibraryRestController {
 
     @ResponseBody
     @GetMapping("/user/exists/{username}")
-    public boolean existByUsername(@PathVariable("username") String username) {
+    public boolean existsByUsername(@PathVariable("username") String username) {
 
         return userService.existsByUsername(username);
     }
