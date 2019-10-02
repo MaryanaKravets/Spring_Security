@@ -1,5 +1,7 @@
 package edu.springsecurity.hw15.service;
 
+import edu.springsecurity.hw15.exception.Message;
+import edu.springsecurity.hw15.exception.NotFoundException;
 import edu.springsecurity.hw15.model.Role;
 import edu.springsecurity.hw15.model.User;
 import edu.springsecurity.hw15.repository.UserRepository;
@@ -13,7 +15,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService, UserDetailsService, Message {
 
     private final UserRepository userRepository;
 
@@ -37,15 +39,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
+    public User getUserById(Long id) {
 
-        return userRepository.findById(id).isPresent() ? userRepository.findById(id) : Optional.empty();
+        return userRepository.findById(id)
+                .orElseThrow(()-> new  NotFoundException(String.format(USER_NOT_FOUND_EXCEPTION_MESSAGE,id)));
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
+    public User getByUsername(String username) {
 
-        return userRepository.findByUsername(username).isPresent() ? userRepository.findByUsername(username) : Optional.empty();
+        return userRepository.findByUsername(username)
+                .orElseThrow(()->new NotFoundException(String.format(USERNAME_NOT_FOUND_EXCEPTION_MESSAGE,username)));
     }
 
     @Override

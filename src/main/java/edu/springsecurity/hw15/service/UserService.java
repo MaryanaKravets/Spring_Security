@@ -5,7 +5,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
 
@@ -19,10 +18,10 @@ public interface UserService {
     List<User> findAllUsers();
 
     @PreAuthorize("isAuthenticated()")
-    Optional<User> getUserById(Long id);
+    User getUserById(Long id);
 
     @PreAuthorize("isAuthenticated()")
-    Optional<User> findByUsername(String username);
+    User getByUsername(String username);
 
     @PreAuthorize("isAuthenticated()")
     boolean existsByUsername(String username);

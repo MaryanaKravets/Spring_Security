@@ -1,5 +1,6 @@
 package edu.springsecurity.hw15.model;
 
+import edu.springsecurity.hw15.exception.Message;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -37,6 +38,7 @@ public class User implements Serializable, UserDetails {
     @CollectionTable(name = "Users_Role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     Set<Role> roles;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         String ROLE_PREFIX = "ROLE_";

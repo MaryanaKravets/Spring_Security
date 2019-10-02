@@ -35,9 +35,12 @@ public class LibraryRestController {
 
     @ResponseBody
     @DeleteMapping("/user/{username}")
-    public void deleteUser(@PathVariable("username") String username) {
-
+    public ResponseEntity<?> deleteUser(@PathVariable("username") String username) {
         userService.deleteByUsername(username);
+
+        return ResponseEntity
+
+                .noContent().build();
     }
 
     @ResponseBody
@@ -48,24 +51,10 @@ public class LibraryRestController {
     }
 
     @ResponseBody
-    @GetMapping("/user/id/{id}")
-    public Optional<User> getUserById(@PathVariable("id") Long id) {
+    @GetMapping("/user/{id}")
+    public User getUserById(@PathVariable("id") Long id) {
 
         return userService.getUserById(id);
-    }
-
-    @ResponseBody
-    @GetMapping("/user/{username}")
-    public Optional<User> findByUsername(@PathVariable("username") String username) {
-
-        return userService.findByUsername(username);
-    }
-
-    @ResponseBody
-    @GetMapping("/user/exists/{username}")
-    public boolean existsByUsername(@PathVariable("username") String username) {
-
-        return userService.existsByUsername(username);
     }
 }
 
